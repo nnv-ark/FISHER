@@ -64,6 +64,11 @@ better than CSS classes do.
 Because adapters are data, a broken site is a file to republish — not a build,
 and not an App Store review.
 
+Bundled sources carry a version. When the app ships a newer definition of a
+source you have not hand-tuned or disabled, it updates itself on launch; one
+you *have* tuned in Settings ▸ Sources is never overwritten behind your back.
+**Restore bundled sources** is the way back.
+
 ## Deliberately not here
 
 - No dashboard, no source-health panel. The dateline is the status display:

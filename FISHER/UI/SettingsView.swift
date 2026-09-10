@@ -164,7 +164,9 @@ struct SourcesSettings: View {
             List(selection: $selection) {
                 ForEach($store.adapters) { $adapter in
                     HStack(spacing: 8) {
-                        Toggle("", isOn: $adapter.enabled)
+                        Toggle("", isOn: Binding(
+                            get: { adapter.enabled },
+                            set: { store.setAdapterEnabled(adapter.id, $0) }))
                             .labelsHidden()
                             .controlSize(.mini)
                         VStack(alignment: .leading, spacing: 1) {
@@ -210,29 +212,29 @@ struct SourcesSettings: View {
 
                     field("Search URL", text: Binding(
                         get: { store.adapters[index].searchURL },
-                        set: { store.adapters[index].searchURL = $0; store.save() }))
+                        set: { store.adapters[index].searchURL = $0; store.markAdapterEdited(id: adapter.id) }))
 
                     Picker("Reads", selection: Binding(
                         get: { store.adapters[index].kind },
-                        set: { store.adapters[index].kind = $0; store.save() })) {
+                        set: { store.adapters[index].kind = $0; store.markAdapterEdited(id: adapter.id) })) {
                             ForEach(Adapter.Kind.allCases) { Text($0.title).tag($0) }
                         }
 
                     if store.adapters[index].kind == .html {
                         field("Each listing (XPath)", text: Binding(
                             get: { store.adapters[index].listingPath ?? "" },
-                            set: { store.adapters[index].listingPath = $0; store.save() }))
+                            set: { store.adapters[index].listingPath = $0; store.markAdapterEdited(id: adapter.id) }))
                     }
                     if store.adapters[index].kind == .nextdata {
                         field("Listings array (key path)", text: Binding(
                             get: { store.adapters[index].collectionPath ?? "" },
-                            set: { store.adapters[index].collectionPath = $0; store.save() }))
+                            set: { store.adapters[index].collectionPath = $0; store.markAdapterEdited(id: adapter.id) }))
                     }
 
                     ForEach(["title", "price", "place", "url", "image", "summary"], id: \.self) { key in
                         field(key.capitalized, text: Binding(
                             get: { store.adapters[index].fields[key] ?? "" },
-                            set: { store.adapters[index].fields[key] = $0; store.save() }))
+                            set: { store.adapters[index].fields[key] = $0; store.markAdapterEdited(id: adapter.id) }))
                     }
 
                     Divider()

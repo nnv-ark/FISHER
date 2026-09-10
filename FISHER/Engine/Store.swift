@@ -45,7 +45,7 @@ final class Store: ObservableObject {
         wishes   = read([WantedAd].self, from: wishesURL) ?? []
         listings = read([String: Listing].self, from: listingsURL) ?? [:]
         editions = read([Edition].self, from: editionsURL) ?? []
-        adapters = read([Adapter].self, from: adaptersURL) ?? bundledAdapters()
+        adapters = mergedWithBundle(read([Adapter].self, from: adaptersURL) ?? [])
         if !adapters.isEmpty, adapters.allSatisfy({ $0.language == nil }) {
             adapters = bundledAdapters()   // saved before sites knew their language
         }
@@ -57,6 +57,54 @@ final class Store: ObservableObject {
               let data = try? Data(contentsOf: url),
               let list = try? JSONDecoder().decode([Adapter].self, from: data) else { return [] }
         return list
+    }
+
+    /// Saved adapters win, with one exception: a bundled version newer than
+    /// the saved one replaces it, which is how a selector fix ships to
+    /// existing installs without an app update. Three kinds are never
+    /// touched — a source the user tuned by hand, a source saved before
+    /// versions existed, and one the user has disabled. New bundled sources
+    /// are appended; the user's order is kept.
+    private func mergedWithBundle(_ saved: [Adapter]) -> [Adapter] {
+        let bundled = bundledAdapters()
+        guard !bundled.isEmpty else { return saved }
+        var byID: [String: Adapter] = [:]
+        for adapter in saved { byID[adapter.id] = adapter }
+        for fresh in bundled {
+            guard let current = byID[fresh.id] else {
+                byID[fresh.id] = fresh          // a source we did not know
+                continue
+            }
+            let freshVersion = fresh.adapterVersion ?? 0
+            let currentVersion = current.adapterVersion ?? 0
+            if freshVersion > currentVersion,
+               current.adapterVersion != nil,     // legacy saves: hands off
+               current.userEdited != true {
+                byID[fresh.id] = fresh
+            }
+        }
+        var merged = saved.compactMap { byID[$0.id] }
+        for fresh in bundled where !saved.contains(where: { $0.id == fresh.id }) {
+            merged.append(fresh)
+        }
+        return merged
+    }
+
+    /// Settings ▸ Sources tuned this source by hand. From now on a bundled
+    /// update of it will not overwrite the tuning.
+    func markAdapterEdited(id: String) {
+        guard let i = adapters.firstIndex(where: { $0.id == id }) else { return }
+        adapters[i].userEdited = true
+        save()
+    }
+
+    /// Turning a source off is a choice about *this* source, so it also
+    /// shields the entry from being swapped for a bundled update.
+    func setAdapterEnabled(_ id: String, _ enabled: Bool) {
+        guard let i = adapters.firstIndex(where: { $0.id == id }) else { return }
+        adapters[i].enabled = enabled
+        adapters[i].userEdited = true
+        save()
     }
 
     func restoreBundledAdapters() {

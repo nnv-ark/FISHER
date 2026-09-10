@@ -35,6 +35,16 @@ struct Adapter: Codable, Identifiable, Hashable {
     var concepts: [String]?
     var canaryMinResults: Int = 1
     var notes: String?
+    /// Bumped in Resources/adapters.json when the shipped definition of this
+    /// source changes. On launch, a bundled version newer than the saved one
+    /// replaces it — that is how a selector fix reaches existing installs
+    /// without an app update. A source with no version at all is legacy:
+    /// it is never touched, so fixes a user already made by hand are safe.
+    var adapterVersion: Int?
+    /// Set when the source is tuned in Settings ▸ Sources, so a later
+    /// bundled fix never silently overwrites hand-edited selectors.
+    /// "Restore bundled sources" is the way back.
+    var userEdited: Bool?
 
     enum Kind: String, Codable, CaseIterable, Identifiable {
         case html, jsonld, nextdata
