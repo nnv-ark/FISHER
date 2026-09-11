@@ -16,14 +16,16 @@ enum WishParser {
 
         var ad = WantedAd(sentence: raw.trimmingCharacters(in: .whitespacesAndNewlines))
 
-        // Ceiling: "under €25,000", "below 25k", "up to 400 eur"
+        // Ceiling: "under €25,000", "below 25k", "up to 400 eur", "under 4.000 kr"
         let ceiling = Lexicon.ceilingWords.map { NSRegularExpression.escapedPattern(for: $0) }.joined(separator: "|")
-        if let m = firstMatch("(?:\(ceiling))\\s*([€$£]|kr\\.?|eur|dkk|sek|nok|isk|usd|gbp)?\\s*([\\d][\\d\\.,\\s]*)\\s*(k\\b|thousand|þús\\.?)?", in: s) {
+        let money = "([€$£]|kr\\.?|eur|dkk|sek|nok|isk|usd|gbp)"
+        if let m = firstMatch("(?:\(ceiling))\\s*\(money)?\\s*([\\d][\\d\\.,\\s]*)\\s*(k\\b|thousand|þús\\.?)?\\s*\(money)?", in: s) {
             var amount = Double(m[2].filter { $0.isNumber }) ?? 0
             if !m[3].isEmpty { amount *= 1000 }
             if amount > 0 {
                 ad.maxPrice = amount
-                let (_, code) = PriceParser.parse(m[1].isEmpty ? nil : m[1])
+                // The money can sit on either side of the figure.
+                let (_, code) = PriceParser.parse(m[1].isEmpty ? (m[4].isEmpty ? nil : m[4]) : m[1])
                 ad.currency = code.isEmpty ? nil : code
             }
         }
