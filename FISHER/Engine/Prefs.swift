@@ -10,6 +10,7 @@ enum PrefKey {
     static let pro = "proVersion"
     static let mastheadFont = "mastheadFont"
     static let homeCurrency = "homeCurrency"
+    static let registryURL = "registryURL"
 }
 
 enum Frequency: String, CaseIterable, Identifiable {

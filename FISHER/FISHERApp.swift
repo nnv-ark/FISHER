@@ -16,6 +16,7 @@ struct FISHERApp: App {
                 .frame(minWidth: 860, minHeight: 620)
                 .onAppear {
                     Notifier.requestPermission()
+                    Task { await store.refreshRegistry() }
                     let s = Scheduler(store: store)
                     s.start()
                     scheduler = s

@@ -145,6 +145,7 @@ struct SourcesSettings: View {
     @State private var probe: AdapterProbe?
     @State private var probing = false
     @State private var testQuery = ""
+    @AppStorage(PrefKey.registryURL) private var registryURL = ""
 
     private var selected: Adapter? { store.adapters.first { $0.id == selection } }
 
@@ -174,11 +175,30 @@ struct SourcesSettings: View {
         .frame(height: 430)
         .onChange(of: selection) { _, _ in probe = nil }
         .safeAreaInset(edge: .bottom) {
-            HStack {
-                Button("Restore bundled sources") { store.restoreBundledAdapters() }
-                Spacer()
-                Button("Reveal adapters.json") {
-                    NSWorkspace.shared.activateFileViewerSelecting([Store.folder.appendingPathComponent("adapters.json")])
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Text("REGISTRY")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                    TextField("https://…/adapters.json", text: $registryURL)
+                        .textFieldStyle(.roundedBorder)
+                        .font(.system(.caption, design: .monospaced))
+                    Button("Check now") {
+                        Task { await store.refreshRegistry(force: true) }
+                    }
+                    .disabled(store.isCheckingRegistry)
+                }
+                if let note = store.registryNote {
+                    Text(note)
+                        .font(.system(size: 10))
+                        .foregroundStyle(.secondary)
+                }
+                HStack {
+                    Button("Restore bundled sources") { store.restoreBundledAdapters() }
+                    Spacer()
+                    Button("Reveal adapters.json") {
+                        NSWorkspace.shared.activateFileViewerSelecting([Store.folder.appendingPathComponent("adapters.json")])
+                    }
                 }
             }
             .controlSize(.small)

@@ -13,6 +13,8 @@ final class Store: ObservableObject {
     @Published var isSweeping = false
     @Published var sweepNote: String = ""
     @Published var lastSweep: Date?
+    @Published var registryNote: String?
+    @Published var isCheckingRegistry = false
 
     var currentEdition: Edition? {
         guard let id = selectedIssue else { return editions.last }
@@ -45,9 +47,12 @@ final class Store: ObservableObject {
         wishes   = read([WantedAd].self, from: wishesURL) ?? []
         listings = read([String: Listing].self, from: listingsURL) ?? [:]
         editions = read([Edition].self, from: editionsURL) ?? []
-        adapters = mergedWithBundle(read([Adapter].self, from: adaptersURL) ?? [])
+        adapters = (read([Adapter].self, from: adaptersURL) ?? []).merged(with: bundledAdapters())
         if !adapters.isEmpty, adapters.allSatisfy({ $0.language == nil }) {
             adapters = bundledAdapters()   // saved before sites knew their language
+        }
+        if let cached = Registry.cached() {
+            adapters = adapters.merged(with: cached)
         }
         selectedIssue = editions.last?.id
     }
@@ -57,37 +62,6 @@ final class Store: ObservableObject {
               let data = try? Data(contentsOf: url),
               let list = try? JSONDecoder().decode([Adapter].self, from: data) else { return [] }
         return list
-    }
-
-    /// Saved adapters win, with one exception: a bundled version newer than
-    /// the saved one replaces it, which is how a selector fix ships to
-    /// existing installs without an app update. Three kinds are never
-    /// touched — a source the user tuned by hand, a source saved before
-    /// versions existed, and one the user has disabled. New bundled sources
-    /// are appended; the user's order is kept.
-    private func mergedWithBundle(_ saved: [Adapter]) -> [Adapter] {
-        let bundled = bundledAdapters()
-        guard !bundled.isEmpty else { return saved }
-        var byID: [String: Adapter] = [:]
-        for adapter in saved { byID[adapter.id] = adapter }
-        for fresh in bundled {
-            guard let current = byID[fresh.id] else {
-                byID[fresh.id] = fresh          // a source we did not know
-                continue
-            }
-            let freshVersion = fresh.adapterVersion ?? 0
-            let currentVersion = current.adapterVersion ?? 0
-            if freshVersion > currentVersion,
-               current.adapterVersion != nil,     // legacy saves: hands off
-               current.userEdited != true {
-                byID[fresh.id] = fresh
-            }
-        }
-        var merged = saved.compactMap { byID[$0.id] }
-        for fresh in bundled where !saved.contains(where: { $0.id == fresh.id }) {
-            merged.append(fresh)
-        }
-        return merged
     }
 
     /// Settings ▸ Sources tuned this source by hand. From now on a bundled
@@ -109,6 +83,25 @@ final class Store: ObservableObject {
 
     func restoreBundledAdapters() {
         adapters = bundledAdapters()
+        save()
+    }
+
+    /// Check the hosted registry (at most once a week — the cache file is the
+    /// throttle, so the cadence survives restarts) and fold any newer source
+    /// definitions into the live list. Same merge rules as the bundled file:
+    /// hand-tuned or disabled sources are never touched.
+    func refreshRegistry(force: Bool = false) async {
+        guard !isCheckingRegistry else { return }
+        isCheckingRegistry = true
+        defer { isCheckingRegistry = false }
+        if let note = await Registry.refreshIfStale(userAgent: Defaults.userAgent, force: force) {
+            registryNote = note
+        }
+        guard let cached = Registry.cached() else { return }
+        let merged = adapters.merged(with: cached)
+        guard merged != adapters else { return }
+        adapters = merged
+        if registryNote == nil { registryNote = "One or more sources updated from the registry." }
         save()
     }
 

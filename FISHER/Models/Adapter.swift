@@ -120,3 +120,35 @@ struct AdapterProbe {
         return "Read \(found) listing\(found == 1 ? "" : "s"), \(withImages) with a picture."
     }
 }
+
+extension Array where Element == Adapter {
+    /// Merge rules shared by the bundled adapters and a hosted registry:
+    /// the saved list wins, except that an incoming definition with a newer
+    /// version replaces the saved one. Never touched: entries the user
+    /// tuned by hand (`userEdited`, which disabling a source also sets) and
+    /// legacy entries saved before versions existed. Unknown incoming ids
+    /// are appended in incoming order; the saved order is kept.
+    func merged(with incoming: [Adapter]) -> [Adapter] {
+        guard !incoming.isEmpty else { return self }
+        var byID: [String: Adapter] = [:]
+        for adapter in self { byID[adapter.id] = adapter }
+        for fresh in incoming {
+            guard let current = byID[fresh.id] else {
+                byID[fresh.id] = fresh          // a source we did not know
+                continue
+            }
+            let freshVersion = fresh.adapterVersion ?? 0
+            let currentVersion = current.adapterVersion ?? 0
+            if freshVersion > currentVersion,
+               current.adapterVersion != nil,     // legacy saves: hands off
+               current.userEdited != true {
+                byID[fresh.id] = fresh
+            }
+        }
+        var merged = compactMap { byID[$0.id] }
+        for fresh in incoming where !contains(where: { $0.id == fresh.id }) {
+            merged.append(fresh)
+        }
+        return merged
+    }
+}

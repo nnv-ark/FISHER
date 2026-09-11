@@ -40,6 +40,9 @@
 		FA0000000000000000000068 /* Rates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000041 /* Rates.swift */; };
 		FA0000000000000000000069 /* MarketTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000042 /* MarketTable.swift */; };
 		FA000000000000000000006A /* BrowserFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000043 /* BrowserFetcher.swift */; };
+		FA00000000000000000000A1 /* Registry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A0 /* Registry.swift */; };
+		FA0000000000000000000097 /* Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000024 /* Adapter.swift */; };
+		FA0000000000000000000099 /* AdapterMergeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000098 /* AdapterMergeTests.swift */; };
 		FA0000000000000000000070 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000036 /* Assets.xcassets */; };
 		FA0000000000000000000071 /* adapters.json in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000037 /* adapters.json */; };
 		FA0000000000000000000085 /* PriceParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000081 /* PriceParserTests.swift */; };
@@ -97,6 +100,8 @@
 		FA00000000000000000000003F /* GrenzeGotisch.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GrenzeGotisch.ttf"; sourceTree = "<group>"; };
 		FA000000000000000000000040 /* GrenzeGotisch-OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "GrenzeGotisch-OFL.txt"; sourceTree = "<group>"; };
 		FA0000000000000000000041 /* Rates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rates.swift; sourceTree = "<group>"; };
+		FA00000000000000000000A0 /* Registry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registry.swift; sourceTree = "<group>"; };
+		FA0000000000000000000098 /* AdapterMergeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdapterMergeTests.swift; sourceTree = "<group>"; };
 		FA0000000000000000000042 /* MarketTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketTable.swift; sourceTree = "<group>"; };
 		FA0000000000000000000043 /* BrowserFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserFetcher.swift; sourceTree = "<group>"; };
 		FA0000000000000000000036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -180,6 +185,7 @@
 				FA000000000000000000002F /* Sweep.swift */,
 				FA0000000000000000000030 /* Scheduler.swift */,
 				FA0000000000000000000041 /* Rates.swift */,
+				FA00000000000000000000A0 /* Registry.swift */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -218,6 +224,7 @@
 				FA0000000000000000000081 /* PriceParserTests.swift */,
 				FA0000000000000000000082 /* WishParserTests.swift */,
 				FA0000000000000000000083 /* MatcherTests.swift */,
+				FA0000000000000000000098 /* AdapterMergeTests.swift */,
 			);
 			path = FISHERTests;
 			sourceTree = "<group>";
@@ -339,6 +346,7 @@
 				FA000000000000000000005F /* Sweep.swift in Sources */,
 				FA0000000000000000000060 /* Scheduler.swift in Sources */,
 				FA0000000000000000000068 /* Rates.swift in Sources */,
+				FA00000000000000000000A1 /* Registry.swift in Sources */,
 				FA0000000000000000000061 /* Theme.swift in Sources */,
 				FA0000000000000000000062 /* EditionView.swift in Sources */,
 				FA0000000000000000000063 /* WishField.swift in Sources */,
@@ -363,6 +371,8 @@
 				FA0000000000000000000085 /* PriceParserTests.swift in Sources */,
 				FA0000000000000000000086 /* WishParserTests.swift in Sources */,
 				FA0000000000000000000087 /* MatcherTests.swift in Sources */,
+				FA0000000000000000000097 /* Adapter.swift in Sources */,
+				FA0000000000000000000099 /* AdapterMergeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

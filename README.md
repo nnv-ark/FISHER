@@ -69,6 +69,15 @@ source you have not hand-tuned or disabled, it updates itself on launch; one
 you *have* tuned in Settings ▸ Sources is never overwritten behind your back.
 **Restore bundled sources** is the way back.
 
+### The hosted registry (optional)
+
+Point Settings ▸ Sources ▸ **Registry** at any URL that serves the same JSON as
+`adapters.json` — a raw file in a repo, a gist, a static site. FISHER checks it
+about once a week and applies newer versions under exactly the same rules as
+bundled updates: hand-tuned or disabled sources are never touched. A broken
+selector becomes a server-side file edit instead of an app update, and *your*
+installs pick it up without you shipping anything.
+
 ## Deliberately not here
 
 - No dashboard, no source-health panel. The dateline is the status display:
