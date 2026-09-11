@@ -49,4 +49,49 @@ final class AdapterMergeTests: XCTestCase {
         let saved = [adapter("a", version: 1)]
         XCTAssertEqual(saved.merged(with: []), saved)
     }
+
+    // MARK: the real registry file
+
+    /// .../FISHERTests/AdapterMergeTests.swift → up two → repo root.
+    private var repoRoot: URL {
+        URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()   // FISHERTests
+            .deletingLastPathComponent()   // repo root
+    }
+
+    /// The Python validator checks the registry's shape; this proves the
+    /// app itself can decode it. If Adapter.swift ever gains a required
+    /// field, the drift is caught here, not on users' machines.
+    func testRegistryFileDecodesThroughAdapter() throws {
+        let url = repoRoot.appendingPathComponent("registry/adapters.json")
+        let data = try Data(contentsOf: url)
+        let registry = try JSONDecoder().decode([Adapter].self, from: data)
+        XCTAssertFalse(registry.isEmpty)
+        for adapter in registry {
+            XCTAssertFalse(adapter.id.isEmpty, "an entry has an empty id")
+            XCTAssertFalse(adapter.name.isEmpty, "\(adapter.id) has an empty name")
+            XCTAssertFalse(adapter.searchURL.isEmpty, "\(adapter.id) has an empty searchURL")
+            XCTAssertNotNil(adapter.adapterVersion,
+                            "\(adapter.id) has no version — the registry could never update it")
+        }
+    }
+
+    /// Same cross-check the validator does: a source the app also ships
+    /// bundled must not regress below the bundled version, or installs
+    /// carrying the bundled one would ignore every registry fix.
+    func testRegistryVersionsNeverBelowBundled() throws {
+        let bundled = try JSONDecoder().decode(
+            [Adapter].self,
+            from: Data(contentsOf: repoRoot.appendingPathComponent("FISHER/Resources/adapters.json")))
+        let registry = try JSONDecoder().decode(
+            [Adapter].self,
+            from: Data(contentsOf: repoRoot.appendingPathComponent("registry/adapters.json")))
+        let bundledVersions = Dictionary(uniqueKeysWithValues: bundled.map { ($0.id, $0.adapterVersion) })
+        for entry in registry {
+            if let floor = bundledVersions[entry.id], let version = entry.adapterVersion, let floor {
+                XCTAssertGreaterThanOrEqual(version, floor,
+                    "\(entry.id): registry version \(version) is below the bundled \(floor)")
+            }
+        }
+    }
 }
