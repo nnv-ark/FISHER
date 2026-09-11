@@ -24,7 +24,6 @@ struct SettingsView: View {
 struct GeneralSettings: View {
     @EnvironmentObject var store: Store
     @AppStorage(PrefKey.frequency) private var frequency = Frequency.daily.rawValue
-    @AppStorage(PrefKey.hour) private var hour = 4
     @AppStorage(PrefKey.searchThePast) private var searchThePast = true
     @AppStorage(PrefKey.launchAtLogin) private var launchAtLogin = false
     @AppStorage(PrefKey.pro) private var isPro = false
@@ -38,12 +37,8 @@ struct GeneralSettings: View {
                 Picker("Check", selection: $frequency) {
                     ForEach(Frequency.allCases) { Text($0.title).tag($0.rawValue) }
                 }
-                Picker("At about", selection: $hour) {
-                    ForEach(0..<24, id: \.self) { Text(clock($0)).tag($0) }
-                }
-                .disabled(frequency == Frequency.hourly.rawValue || frequency == Frequency.manual.rawValue)
             } footer: {
-                Text("A used-boat hunt runs for months, so one reading a night is plenty and keeps FISHER's traffic indistinguishable from a person with a coffee. If the Mac is asleep at the appointed hour, the reading happens at the next wake — a delay, never a gap.")
+                Text("A used-boat hunt runs for months, so one reading a night is plenty and keeps FISHER's traffic indistinguishable from a person with a coffee. The system picks a quiet moment in that interval; if the Mac is asleep, the reading happens at the next wake — a delay, never a gap.")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -122,12 +117,6 @@ struct GeneralSettings: View {
             return base + " No rates yet — they are fetched with the first reading."
         }
         return base + " Rates from the \(book.source), \(book.date), fetched \(book.age)."
-    }
-
-    private func clock(_ h: Int) -> String {
-        let suffix = h < 12 ? "a.m." : "p.m."
-        let display = h % 12 == 0 ? 12 : h % 12
-        return "\(display):00 \(suffix)"
     }
 
     private func relative(_ date: Date) -> String {

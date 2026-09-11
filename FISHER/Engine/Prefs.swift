@@ -2,7 +2,6 @@ import Foundation
 
 enum PrefKey {
     static let frequency   = "frequency"
-    static let hour        = "hourOfDay"
     static let notify      = "notifyStyle"
     static let userAgent   = "userAgent"
     static let keepIssues  = "keepIssues"
@@ -92,7 +91,6 @@ enum Defaults {
     static func register() {
         UserDefaults.standard.register(defaults: [
             PrefKey.frequency: Frequency.daily.rawValue,
-            PrefKey.hour: 4,
             PrefKey.notify: NotifyStyle.summary.rawValue,
             PrefKey.userAgent: defaultUserAgent,
             PrefKey.keepIssues: 180,
@@ -114,7 +112,6 @@ enum Defaults {
         let s = UserDefaults.standard.string(forKey: PrefKey.userAgent) ?? defaultUserAgent
         return s.isEmpty ? "FISHER/1.0" : s
     }
-    static var hour: Int { UserDefaults.standard.integer(forKey: PrefKey.hour) }
     /// The bought version carries no advertising.
     static var isPro: Bool { UserDefaults.standard.bool(forKey: PrefKey.pro) }
     /// Empty means prices are shown exactly as advertised and nothing else.

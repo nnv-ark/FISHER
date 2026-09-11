@@ -128,7 +128,6 @@ extension Store {
         editions.append(edition)
         selectedIssue = edition.id
         lastSweep = Date()
-        for index in wishes.indices { wishes[index].lastSweep = Date() }
         save()
         Notifier.announce(edition)
     }

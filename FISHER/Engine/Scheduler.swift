@@ -45,11 +45,4 @@ final class Scheduler {
         guard due, !store.wishes.isEmpty else { return }
         Task { await store.sweep(reason: "catch-up") }
     }
-
-    /// The scheduled hour, jittered per install so a few thousand copies of
-    /// FISHER don't all knock at 04:00:00.
-    static var jitteredMinute: Int {
-        let seed = abs((Host.current().localizedName ?? "fisher").hashValue)
-        return seed % 60
-    }
 }

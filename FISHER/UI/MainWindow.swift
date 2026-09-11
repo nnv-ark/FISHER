@@ -176,7 +176,7 @@ struct MainWindow: View {
         if let max = wish.maxPrice { bits.append("under \(Money.format(max, wish.currency ?? ""))") }
         if let place = wish.places.first { bits.append(place) }
         if bits.isEmpty {
-            bits.append(wish.cadence == .followSettings ? Defaults.frequency.title : wish.cadence.title)
+            bits.append(Defaults.frequency.title)
         }
         return bits.joined(separator: " · ")
     }
