@@ -85,7 +85,9 @@ from a blank template or any existing source, edit the full JSON, run it
 against a live page, and read the parsed listings — the draft never leaves
 the window until you press **Add to Sources**, and what you install is marked
 hand-tuned, so neither the bundled file nor the registry will later overwrite
-it.
+it. **Copy as registry entry** puts the same draft on the pasteboard in
+registry shape — local-only flags stripped, version ensured — ready to paste
+into `registry/adapters.json` and ship to every install.
 
 ## Deliberately not here
 

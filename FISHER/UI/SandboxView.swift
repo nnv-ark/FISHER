@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 /// A safe place to work on an adapter. The draft lives only in this tab —
 /// nothing is saved, nothing joins a sweep — until you choose to send it to
@@ -57,6 +58,8 @@ struct SandboxSettings: View {
                 }
                 Button("Load") { loadBase() }
                 Spacer()
+                Button("Copy as registry entry") { copyAsRegistryEntry() }
+                    .disabled(parsedAdapter == nil)
                 Button("Add to Sources…") {
                     if let adapter = parsedAdapter { pendingInstall = adapter }
                 }
@@ -214,5 +217,28 @@ struct SandboxSettings: View {
         store.installAdapterFromSandbox(adapter)
         pendingInstall = nil
         note = "“\(adapter.name)” is in Sources now."
+    }
+
+    /// The other door out: a registry-ready object on the pasteboard. The
+    /// local-only flags a draft can carry (`userEdited`) are stripped, and
+    /// an adapter with no version gets version 1 — without one the registry
+    /// could never update it.
+    private func copyAsRegistryEntry() {
+        guard var adapter = parsedAdapter else { return }
+        let versionWasMissing = adapter.adapterVersion == nil
+        if adapter.adapterVersion == nil { adapter.adapterVersion = 1 }
+        adapter.userEdited = nil
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        guard let data = try? encoder.encode(adapter),
+              var object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
+        object.removeValue(forKey: "userEdited")
+        guard let out = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted, .sortedKeys]),
+              let text = String(data: out, encoding: .utf8) else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        note = versionWasMissing
+            ? "Copied with version set to 1 — bump it when the entry changes."
+            : "Copied — paste into registry/adapters.json."
     }
 }
