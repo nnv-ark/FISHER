@@ -15,3 +15,11 @@ jobs:
         run: |
           xcodebuild -project FISHER.xcodeproj -scheme FISHER \
             -configuration Debug test CODE_SIGNING_ALLOWED=NO
+
+  registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate the adapter registry
+        run: python3 registry/validate.py
