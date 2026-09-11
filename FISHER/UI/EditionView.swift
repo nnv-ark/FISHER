@@ -405,12 +405,10 @@ struct EditionView: View {
 
     private var nextLine: String {
         switch cadence {
-        case .hourly:     return "Next edition within the hour"
-        case .twiceDaily: return "Next edition in twelve hours"
-        case .daily:      return "Next edition tomorrow"
-        case .weekly:     return "Next edition in a week"
-        case .monthly:    return "Next edition next month"
-        case .manual:     return "Next edition when you ask"
+        case .daily:   return "Next edition tomorrow"
+        case .weekly:  return "Next edition in a week"
+        case .monthly: return "Next edition next month"
+        case .manual:  return "Next edition when you ask"
         }
     }
 

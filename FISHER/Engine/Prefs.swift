@@ -13,37 +13,32 @@ enum PrefKey {
 }
 
 enum Frequency: String, CaseIterable, Identifiable {
-    case hourly, twiceDaily, daily, weekly, monthly, manual
+    case daily, weekly, monthly, manual
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .hourly:     return "Every hour"
-        case .twiceDaily: return "Twice a day"
-        case .daily:      return "Once a day"
-        case .weekly:     return "Once a week"
-        case .monthly:    return "Once a month"
-        case .manual:     return "Only when I ask"
+        case .daily:   return "Once a day"
+        case .weekly:  return "Once a week"
+        case .monthly: return "Once a month"
+        case .manual:  return "Only when I ask"
         }
     }
 
     /// What it says on the masthead.
     var editionName: String {
         switch self {
-        case .hourly:                 return "Hourly"
-        case .twiceDaily, .daily:     return "Daily"
-        case .weekly:                 return "Weekly"
-        case .monthly:                return "Monthly"
-        case .manual:                 return "Occasional"
+        case .daily:   return "Daily"
+        case .weekly:  return "Weekly"
+        case .monthly: return "Monthly"
+        case .manual:  return "Occasional"
         }
     }
     var interval: TimeInterval {
         switch self {
-        case .hourly:     return 3_600
-        case .twiceDaily: return 43_200
-        case .daily:      return 86_400
-        case .weekly:     return 604_800
-        case .monthly:    return 2_592_000
-        case .manual:     return .greatestFiniteMagnitude
+        case .daily:   return 86_400
+        case .weekly:  return 604_800
+        case .monthly: return 2_592_000
+        case .manual:  return .greatestFiniteMagnitude
         }
     }
 }
