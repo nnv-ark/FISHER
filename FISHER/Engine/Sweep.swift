@@ -135,7 +135,7 @@ extension Store {
     /// Settings ▸ Sources ▸ Test. Points one adapter at one live page and
     /// reports exactly what came back, which is the only honest way to keep
     /// selectors alive.
-    func probe(_ adapter: Adapter, query: String) async -> AdapterProbe {
+    func probe(_ adapter: Adapter, query: String, sampleCount: Int = 3) async -> AdapterProbe {
         let url = adapter.url(for: query.isEmpty ? (wishes.first?.query(language: adapter.lang) ?? "boat") : query)
         guard let url else {
             return AdapterProbe(adapter: adapter, url: nil, httpStatus: nil, found: 0, withImages: 0, samples: [], error: "The search URL is not valid.")
@@ -157,7 +157,7 @@ extension Store {
                                 httpStatus: status,
                                 found: found.count,
                                 withImages: found.filter { $0.imageURL != nil }.count,
-                                samples: Array(found.prefix(3)),
+                                samples: Array(found.prefix(sampleCount)),
                                 error: nil)
         } catch {
             return AdapterProbe(adapter: adapter, url: url, httpStatus: nil, found: 0, withImages: 0, samples: [], error: error.localizedDescription)

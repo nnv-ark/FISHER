@@ -78,6 +78,15 @@ bundled updates: hand-tuned or disabled sources are never touched. A broken
 selector becomes a server-side file edit instead of an app update, and *your*
 installs pick it up without you shipping anything.
 
+### The sandbox
+
+Settings ▸ **Sandbox** is the workbench for a new or ailing adapter. Start
+from a blank template or any existing source, edit the full JSON, run it
+against a live page, and read the parsed listings — the draft never leaves
+the window until you press **Add to Sources**, and what you install is marked
+hand-tuned, so neither the bundled file nor the registry will later overwrite
+it.
+
 ## Deliberately not here
 
 - No dashboard, no source-health panel. The dateline is the status display:

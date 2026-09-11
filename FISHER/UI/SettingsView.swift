@@ -14,6 +14,8 @@ struct SettingsView: View {
                 .tabItem { Label("Notifications", systemImage: "bell") }
             AdvancedSettings()
                 .tabItem { Label("Advanced", systemImage: "wrench.and.screwdriver") }
+            SandboxSettings()
+                .tabItem { Label("Sandbox", systemImage: "shippingbox") }
         }
         .frame(width: 560)
     }

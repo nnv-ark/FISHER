@@ -41,6 +41,7 @@
 		FA0000000000000000000069 /* MarketTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000042 /* MarketTable.swift */; };
 		FA000000000000000000006A /* BrowserFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000043 /* BrowserFetcher.swift */; };
 		FA00000000000000000000A1 /* Registry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A0 /* Registry.swift */; };
+		FA00000000000000000000A3 /* SandboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000A2 /* SandboxView.swift */; };
 		FA0000000000000000000097 /* Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000024 /* Adapter.swift */; };
 		FA0000000000000000000099 /* AdapterMergeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000098 /* AdapterMergeTests.swift */; };
 		FA0000000000000000000070 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000036 /* Assets.xcassets */; };
@@ -102,6 +103,7 @@
 		FA0000000000000000000041 /* Rates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rates.swift; sourceTree = "<group>"; };
 		FA00000000000000000000A0 /* Registry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registry.swift; sourceTree = "<group>"; };
 		FA0000000000000000000098 /* AdapterMergeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdapterMergeTests.swift; sourceTree = "<group>"; };
+		FA00000000000000000000A2 /* SandboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandboxView.swift; sourceTree = "<group>"; };
 		FA0000000000000000000042 /* MarketTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketTable.swift; sourceTree = "<group>"; };
 		FA0000000000000000000043 /* BrowserFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserFetcher.swift; sourceTree = "<group>"; };
 		FA0000000000000000000036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				FA0000000000000000000035 /* SettingsView.swift */,
 				FA000000000000000000003A /* Advertising.swift */,
 				FA0000000000000000000042 /* MarketTable.swift */,
+				FA00000000000000000000A2 /* SandboxView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				FA0000000000000000000065 /* SettingsView.swift in Sources */,
 				FA0000000000000000000067 /* Advertising.swift in Sources */,
 				FA0000000000000000000069 /* MarketTable.swift in Sources */,
+				FA00000000000000000000A3 /* SandboxView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

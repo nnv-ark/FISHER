@@ -86,6 +86,20 @@ final class Store: ObservableObject {
         save()
     }
 
+    /// The sandbox is where adapters are worked out. Installing one means it
+    /// was tuned by hand, so it carries `userEdited` and is shielded from
+    /// bundled and registry updates. An id that already exists is replaced.
+    func installAdapterFromSandbox(_ draft: Adapter) {
+        var draft = draft
+        draft.userEdited = true
+        if let i = adapters.firstIndex(where: { $0.id == draft.id }) {
+            adapters[i] = draft
+        } else {
+            adapters.append(draft)
+        }
+        save()
+    }
+
     /// Check the hosted registry (at most once a week — the cache file is the
     /// throttle, so the cadence survives restarts) and fold any newer source
     /// definitions into the live list. Same merge rules as the bundled file:
