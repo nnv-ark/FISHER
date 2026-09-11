@@ -1,0 +1,17 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and run the engine tests
+        run: |
+          xcodebuild -project FISHER.xcodeproj -scheme FISHER \
+            -configuration Debug test CODE_SIGNING_ALLOWED=NO
