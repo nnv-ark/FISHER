@@ -355,5 +355,27 @@
   },
   "notes": "European boat market (Denmark-based, boats across the EU), SSR HTML — no rendering needed. Verified 2026-09-13: 'grinde' returned 12 cards with title/url/price parsing on all; some cards lack image or catchphrase. Country is embedded in body text ('| Country : Germany') with no clean selector, so no place field. No pagination found — pages pinned to 1.",
   "adapterVersion": 1
+ },
+ {
+  "id": "reverb",
+  "name": "Reverb",
+  "kind": "html",
+  "searchURL": "https://reverb.com/marketplace?query={terms}",
+  "baseURL": "https://reverb.com",
+  "defaultCurrency": "USD",
+  "language": "en",
+  "pages": 1,
+  "throttle": 6,
+  "render": "browser",
+  "canaryMinResults": 3,
+  "listingPath": "//div[contains(@class,'rc-listing-card--full-height')]",
+  "fields": {
+   "title": ".//a[contains(@class,'rc-listing-card__title-element')]",
+   "url": ".//a[contains(@class,'rc-listing-card__title-element')]/@href",
+   "price": ".//div[contains(@class,'rc-listing-card__price')]//span[contains(@class,'visually-hidden')]",
+   "image": ".//img/@src"
+  },
+  "notes": "Global music-gear marketplace. Hard TLS-fingerprint wall: plain HTTP gets 403 even with browser headers, so this source is rendered in WebKit. Verified 2026-09-13 through the app's own BrowserFetcher: 'gibson' returned 60 cards with title/url/price/image on every one. Prices are USD. No location on cards. Some item links carry a long tracking parameter — harmless. No pagination found — pages pinned to 1.",
+  "adapterVersion": 1
  }
 ]
