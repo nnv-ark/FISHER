@@ -82,7 +82,7 @@ enum NotifyStyle: String, CaseIterable, Identifiable {
 }
 
 enum Defaults {
-    static let defaultUserAgent = "FISHER/1.0 (personal wanted-ads reader; one visit a day)"
+    static let defaultUserAgent = "FISHER/1.1 (personal wanted-ads reader; one visit a day)"
 
     static func register() {
         UserDefaults.standard.register(defaults: [
@@ -106,7 +106,7 @@ enum Defaults {
     }
     static var userAgent: String {
         let s = UserDefaults.standard.string(forKey: PrefKey.userAgent) ?? defaultUserAgent
-        return s.isEmpty ? "FISHER/1.0" : s
+        return s.isEmpty ? "FISHER/1.1" : s
     }
     /// The bought version carries no advertising.
     static var isPro: Bool { UserDefaults.standard.bool(forKey: PrefKey.pro) }

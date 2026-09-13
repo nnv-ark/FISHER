@@ -23,7 +23,7 @@ actor Fetcher {
         var finalURL: URL
     }
 
-    func get(_ url: URL, throttle: Double, userAgent: String) async throws -> Response {
+    func get(_ url: URL, throttle: Double, userAgent: String, headers: [String: String] = [:]) async throws -> Response {
         let host = url.host ?? url.absoluteString
         if let last = lastHit[host] {
             let wait = throttle - Date().timeIntervalSince(last)
@@ -35,6 +35,16 @@ actor Fetcher {
         req.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         req.setValue("text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8", forHTTPHeaderField: "Accept")
         req.setValue("en,da;q=0.8,sv;q=0.7,nl;q=0.6,is;q=0.6", forHTTPHeaderField: "Accept-Language")
+        // What a real browser sends on a top-level navigation. Sites that
+        // sniff for scrapers look here before anything else; a plain
+        // URLSession request otherwise stands out.
+        req.setValue("document", forHTTPHeaderField: "Sec-Fetch-Dest")
+        req.setValue("navigate", forHTTPHeaderField: "Sec-Fetch-Mode")
+        req.setValue("?1", forHTTPHeaderField: "Sec-Fetch-User")
+        req.setValue("none", forHTTPHeaderField: "Sec-Fetch-Site")
+        req.setValue("1", forHTTPHeaderField: "Upgrade-Insecure-Requests")
+        // The adapter's own headers win — presentation per source is data.
+        for (name, value) in headers { req.setValue(value, forHTTPHeaderField: name) }
 
         let (data, response) = try await session.data(for: req)
         let http = response as? HTTPURLResponse

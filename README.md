@@ -89,6 +89,13 @@ it. **Copy as registry entry** puts the same draft on the pasteboard in
 registry shape — local-only flags stripped, version ensured — ready to paste
 into `registry/adapters.json` and ship to every install.
 
+Two fields exist because live sites demanded them: `termsSeparator` — how the
+words join when `{terms}` sits in a URL path (`"-"` slugs by default;
+Marktplaats searches only `+`-joined words) — and `headers` — extra request
+headers for that source alone, for sites that want a specific presentation.
+The fetcher also speaks the `Sec-Fetch-*` dialect a real browser sends on a
+top-level navigation, because sniffers check there first.
+
 ## Deliberately not here
 
 - No dashboard, no source-health panel. The dateline is the status display:

@@ -30,6 +30,16 @@ struct Adapter: Codable, Identifiable, Hashable {
     /// first, for sites that turn away plain requests or draw their listings
     /// with script.
     var render: String?
+    /// Extra request headers for this source only — how a source is
+    /// introduced is data too. Set from the Sandbox when a site wants a
+    /// specific presentation (a Referer, an accepted-language nuance); the
+    /// app never invents credentials.
+    var headers: [String: String]?
+    /// How the words join when {terms} lands in a URL path. The default "-"
+    /// makes boat24-style slugs; some sites index their searches with the
+    /// words "+"-joined instead (Marktplaats), and hyphenating there finds
+    /// nothing.
+    var termsSeparator: String?
     /// What this source carries. A boat vertical has no opinion about guitars,
     /// so a wish for one should not knock on its door. Empty means everything.
     var concepts: [String]?
@@ -90,7 +100,7 @@ struct Adapter: Codable, Identifiable, Hashable {
                 .lowercased()
                 .components(separatedBy: CharacterSet.alphanumerics.inverted)
                 .filter { !$0.isEmpty }
-                .joined(separator: "-")
+                .joined(separator: termsSeparator ?? "-")
         } else {
             replacement = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
         }
@@ -99,6 +109,45 @@ struct Adapter: Codable, Identifiable, Hashable {
             .replacingOccurrences(of: "{terms}", with: replacement)
             .replacingOccurrences(of: "{page}", with: String(page))
         return URL(string: s)
+    }
+}
+
+extension Adapter {
+    enum CodingKeys: String, CodingKey {
+        case id, name, kind, searchURL, enabled, throttle, listingPath, fields
+        case collectionPath, baseURL, defaultCurrency, language, pages, priceDivisor
+        case render, headers, termsSeparator, concepts, canaryMinResults, notes
+        case adapterVersion, userEdited
+    }
+
+    /// Adapters are written by hand, in a text editor, possibly in a hurry.
+    /// Everything but id/name/kind/searchURL has a default, so a minimal
+    /// entry decodes. (In an extension, so the memberwise init the tests
+    /// use survives.)
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(String.self, forKey: .id)
+        name = try c.decode(String.self, forKey: .name)
+        kind = try c.decode(Kind.self, forKey: .kind)
+        searchURL = try c.decode(String.self, forKey: .searchURL)
+        enabled = try c.decodeIfPresent(Bool.self, forKey: .enabled) ?? true
+        throttle = try c.decodeIfPresent(Double.self, forKey: .throttle) ?? 3
+        listingPath = try c.decodeIfPresent(String.self, forKey: .listingPath)
+        fields = try c.decodeIfPresent([String: String].self, forKey: .fields) ?? [:]
+        collectionPath = try c.decodeIfPresent(String.self, forKey: .collectionPath)
+        baseURL = try c.decodeIfPresent(String.self, forKey: .baseURL)
+        defaultCurrency = try c.decodeIfPresent(String.self, forKey: .defaultCurrency) ?? ""
+        language = try c.decodeIfPresent(String.self, forKey: .language)
+        pages = try c.decodeIfPresent(Int.self, forKey: .pages)
+        priceDivisor = try c.decodeIfPresent(Double.self, forKey: .priceDivisor)
+        render = try c.decodeIfPresent(String.self, forKey: .render)
+        headers = try c.decodeIfPresent([String: String].self, forKey: .headers)
+        termsSeparator = try c.decodeIfPresent(String.self, forKey: .termsSeparator)
+        concepts = try c.decodeIfPresent([String].self, forKey: .concepts)
+        canaryMinResults = try c.decodeIfPresent(Int.self, forKey: .canaryMinResults) ?? 1
+        notes = try c.decodeIfPresent(String.self, forKey: .notes)
+        adapterVersion = try c.decodeIfPresent(Int.self, forKey: .adapterVersion)
+        userEdited = try c.decodeIfPresent(Bool.self, forKey: .userEdited)
     }
 }
 

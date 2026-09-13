@@ -41,7 +41,7 @@ extension Store {
                     if adapter.needsBrowser {
                         data = try await BrowserFetcher.shared.html(for: url, userAgent: userAgent)
                     } else {
-                        let response = try await Fetcher.shared.get(url, throttle: adapter.throttle, userAgent: userAgent)
+                        let response = try await Fetcher.shared.get(url, throttle: adapter.throttle, userAgent: userAgent, headers: adapter.headers ?? [:])
                         guard (200..<300).contains(response.status) else { failures += 1; continue }
                         data = response.data
                     }
@@ -147,7 +147,7 @@ extension Store {
                 data = try await BrowserFetcher.shared.html(for: url, userAgent: Defaults.userAgent)
                 status = 200
             } else {
-                let response = try await Fetcher.shared.get(url, throttle: 0, userAgent: Defaults.userAgent)
+                let response = try await Fetcher.shared.get(url, throttle: 0, userAgent: Defaults.userAgent, headers: adapter.headers ?? [:])
                 data = response.data
                 status = response.status
             }
