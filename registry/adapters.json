@@ -267,5 +267,93 @@
   },
   "notes": "Danish brokerage. Now rendered in WebKit, which does get the page — but its selectors are still unverified, so it is off. Press Test in this pane and correct them.",
   "adapterVersion": 1
+ },
+ {
+  "id": "tradera",
+  "name": "Tradera",
+  "kind": "html",
+  "searchURL": "https://www.tradera.com/search?q={terms}",
+  "baseURL": "https://www.tradera.com",
+  "defaultCurrency": "SEK",
+  "language": "sv",
+  "pages": 1,
+  "canaryMinResults": 3,
+  "listingPath": "//div[@data-item-card-id]",
+  "fields": {
+   "title": ".//a[@data-testid='item-card-image']/@title",
+   "url": ".//a[@data-testid='item-card-image']/@href",
+   "price": ".//*[@data-testid='price' or @data-testid='bin-price']",
+   "image": ".//a[@data-testid='item-card-image']//img/@src"
+  },
+  "notes": "Sweden's largest marketplace (eBay-owned), auction + fixed price. SSR HTML, no rendering needed. Verified 2026-09-13: 35 cards on a search page, title/url/price/image all present. No location on cards. No pagination links found — pages pinned to 1. Prices print as '175 kr,' — the SEK defaultCurrency tells the price parser which krona this is.",
+  "adapterVersion": 1
+ },
+ {
+  "id": "bazos-sk",
+  "name": "Bazos.sk",
+  "kind": "html",
+  "searchURL": "https://www.bazos.sk/search.php?hledat={terms}&rubriky=www",
+  "baseURL": "https://www.bazos.sk",
+  "defaultCurrency": "EUR",
+  "language": "sk",
+  "pages": 1,
+  "canaryMinResults": 3,
+  "listingPath": "//div[@class='inzeraty inzeratyflex']",
+  "fields": {
+   "title": ".//div[@class='inzeratynadpis']//h2//a",
+   "url": ".//div[@class='inzeratynadpis']//h2//a/@href",
+   "price": ".//div[@class='inzeratycena']",
+   "image": ".//div[@class='inzeratynadpis']/a/img[@class='obrazek']/@src",
+   "summary": ".//div[@class='popis']",
+   "place": ".//div[@class='inzeratylok']"
+  },
+  "notes": "Slovakia's big free classifieds site. Primitive stable HTML, no bot wall. Verified 2026-09-13: 'gibson' returned 20 of 112 results with title/url/price/image/summary/place all parsing. Space-grouped prices ('1 699 €'). Pagination exists ('Dalšia') but its href wasn't captured during scouting — pages pinned to 1 until verified.",
+  "adapterVersion": 1
+ },
+ {
+  "id": "bazos-cz",
+  "name": "Bazos.cz",
+  "kind": "html",
+  "searchURL": "https://www.bazos.cz/search.php?hledat={terms}&rubriky=www",
+  "baseURL": "https://www.bazos.cz",
+  "defaultCurrency": "CZK",
+  "language": "cs",
+  "pages": 1,
+  "canaryMinResults": 3,
+  "listingPath": "//div[@class='inzeraty inzeratyflex']",
+  "fields": {
+   "title": ".//div[@class='inzeratynadpis']//h2//a",
+   "url": ".//div[@class='inzeratynadpis']//h2//a/@href",
+   "price": ".//div[@class='inzeratycena']",
+   "image": ".//div[@class='inzeratynadpis']/a/img[@class='obrazek']/@src",
+   "summary": ".//div[@class='popis']",
+   "place": ".//div[@class='inzeratylok']"
+  },
+  "notes": "Czech Republic's Bazos — same software and markup as bazos-sk, so the same selectors hold. Verified 2026-09-13: 'gibson' returned 20 cards, all fields parsing. Prices in CZK ('31 000 Kč'). Pages pinned to 1 as with bazos-sk.",
+  "adapterVersion": 1
+ },
+ {
+  "id": "scanboat",
+  "name": "Scanboat",
+  "kind": "html",
+  "searchURL": "https://www.scanboat.com/en/boat-market/boats?searchText={terms}",
+  "baseURL": "https://www.scanboat.com",
+  "defaultCurrency": "EUR",
+  "language": "en",
+  "pages": 1,
+  "concepts": [
+   "boat"
+  ],
+  "canaryMinResults": 3,
+  "listingPath": "//div[@class='item active']",
+  "fields": {
+   "title": ".//h2",
+   "url": ".//a[contains(@href,'/boat-market/boats/')]/@href",
+   "price": ".//section[contains(@class,'flex-2')]/p",
+   "image": ".//div[@class='item__thumb']/img/@src",
+   "summary": ".//p[@class='catchphrase']"
+  },
+  "notes": "European boat market (Denmark-based, boats across the EU), SSR HTML — no rendering needed. Verified 2026-09-13: 'grinde' returned 12 cards with title/url/price parsing on all; some cards lack image or catchphrase. Country is embedded in body text ('| Country : Germany') with no clean selector, so no place field. No pagination found — pages pinned to 1.",
+  "adapterVersion": 1
  }
 ]

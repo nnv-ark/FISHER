@@ -28,7 +28,16 @@ enum PriceParser {
             let tokens = lower.split(whereSeparator: { !$0.isLetter && $0 != "." }).map(String.init)
             outer: for (needle, code) in words {
                 for token in tokens where token == needle {
-                    currency = code; sawCurrency = true; break outer
+                    // "kr" is the krona of four countries. A source that told
+                    // us its money — Tradera (SEK), dba (DKK) — wins over
+                    // the Danish default; only a bare "kr" with no hint
+                    // falls back to DKK.
+                    if needle == "kr" || needle == "kr.", !fallbackCurrency.isEmpty {
+                        currency = fallbackCurrency
+                    } else {
+                        currency = code
+                    }
+                    sawCurrency = true; break outer
                 }
             }
         }

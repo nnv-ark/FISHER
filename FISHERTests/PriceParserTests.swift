@@ -30,6 +30,10 @@ final class PriceParserTests: XCTestCase {
         .init(raw: "Grinde D564 årgang 1976", fallback: "DKK", price: nil, currency: "DKK"),
         // Real price beats the model year next to it.
         .init(raw: "Grinde 1976 model — 45.000 kr.", fallback: "", price: 45_000, currency: "DKK"),
+        // "kr" alone is ambiguous — the source's own money wins when it has one.
+        .init(raw: "175 kr,",             fallback: "SEK", price: 175,      currency: "SEK"),
+        .init(raw: "1 643 kr,",           fallback: "SEK", price: 1_643,   currency: "SEK"),
+        .init(raw: "1.500 kr",            fallback: "DKK", price: 1_500,   currency: "DKK"),
         // Nothing at all.
         .init(raw: "",                  fallback: "EUR", price: nil, currency: "EUR"),
     ]
