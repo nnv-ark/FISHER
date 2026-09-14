@@ -48,9 +48,11 @@
 		FA0000000000000000000070 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000036 /* Assets.xcassets */; };
 		FA0000000000000000000071 /* adapters.json in Resources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000037 /* adapters.json */; };
 		FA0000000000000000000085 /* PriceParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000081 /* PriceParserTests.swift */; };
+		FA00000000000000000000B1 /* EditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00000000000000000000B0 /* EditionTests.swift */; };
 		FA0000000000000000000086 /* WishParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000082 /* WishParserTests.swift */; };
 		FA0000000000000000000087 /* MatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000083 /* MatcherTests.swift */; };
 		FA0000000000000000000090 /* PriceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000026 /* PriceParser.swift */; };
+		FA00000000000000000000B2 /* Edition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000023 /* Edition.swift */; };
 		FA0000000000000000000091 /* WishParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000029 /* WishParser.swift */; };
 		FA0000000000000000000092 /* Lexicon.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0000000000000000000039 /* Lexicon.swift */; };
 		FA0000000000000000000093 /* Matcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000000000000000000002A /* Matcher.swift */; };
@@ -114,6 +116,7 @@
 		FA0000000000000000000080 /* FISHERTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FISHERTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA0000000000000000000081 /* PriceParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceParserTests.swift; sourceTree = "<group>"; };
 		FA0000000000000000000082 /* WishParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishParserTests.swift; sourceTree = "<group>"; };
+		FA00000000000000000000B0 /* EditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditionTests.swift; sourceTree = "<group>"; };
 		FA0000000000000000000083 /* MatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatcherTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -231,6 +234,7 @@
 				FA0000000000000000000083 /* MatcherTests.swift */,
 				FA0000000000000000000098 /* AdapterMergeTests.swift */,
 				FA00000000000000000000A4 /* AdapterURLTests.swift */,
+				FA00000000000000000000B0 /* EditionTests.swift */,
 			);
 			path = FISHERTests;
 			sourceTree = "<group>";
@@ -381,6 +385,8 @@
 				FA0000000000000000000097 /* Adapter.swift in Sources */,
 				FA0000000000000000000099 /* AdapterMergeTests.swift in Sources */,
 				FA00000000000000000000A5 /* AdapterURLTests.swift in Sources */,
+				FA00000000000000000000B1 /* EditionTests.swift in Sources */,
+				FA00000000000000000000B2 /* Edition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

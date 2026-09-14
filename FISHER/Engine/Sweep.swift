@@ -125,8 +125,8 @@ extension Store {
                                      missedSources: missed,
                                      adName: { id in id.flatMap { names[$0] } ?? "Wanted" })
 
-        editions.append(edition)
-        selectedIssue = edition.id
+        editions = Edition.inserting(edition, into: editions)
+        selectedIssue = editions.last(where: { Calendar.current.isDateInToday($0.date) })?.id
         lastSweep = Date()
         save()
         Notifier.announce(edition)

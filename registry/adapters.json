@@ -342,7 +342,10 @@
   "language": "en",
   "pages": 1,
   "concepts": [
-   "boat"
+   "boat",
+   "sailboat",
+   "motorboat",
+   "dinghy"
   ],
   "canaryMinResults": 3,
   "listingPath": "//div[@class='item active']",
@@ -354,7 +357,7 @@
    "summary": ".//p[@class='catchphrase']"
   },
   "notes": "European boat market (Denmark-based, boats across the EU), SSR HTML — no rendering needed. Verified 2026-09-13: 'grinde' returned 12 cards with title/url/price parsing on all; some cards lack image or catchphrase. Country is embedded in body text ('| Country : Germany') with no clean selector, so no place field. No pagination found — pages pinned to 1.",
-  "adapterVersion": 1
+  "adapterVersion": 2
  },
  {
   "id": "reverb",

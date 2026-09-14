@@ -19,6 +19,20 @@ struct Edition: Identifiable, Codable, Hashable {
     var isQuiet: Bool { lead == nil && seconds.isEmpty && brief.isEmpty }
     var newCount: Int { (lead == nil ? 0 : 1) + seconds.count + brief.count }
 
+    /// One paper per day: a re-sweep reprints today's edition instead of
+    /// stacking a second issue under the same date. A reprint keeps the
+    /// issue number the day's paper already had.
+    static func inserting(_ edition: Edition, into editions: [Edition]) -> [Edition] {
+        guard let todays = editions.lastIndex(where: { Calendar.current.isDateInToday($0.date) }) else {
+            return editions + [edition]
+        }
+        var reprinted = edition
+        reprinted.id = editions[todays].id
+        var out = editions
+        out[todays] = reprinted
+        return out
+    }
+
     struct Item: Codable, Hashable, Identifiable {
         var id: String
         var flag: String
