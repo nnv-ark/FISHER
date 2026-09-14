@@ -341,13 +341,14 @@ struct EditionView: View {
     // MARK: a quiet morning
 
     private func quiet(_ edition: Edition) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
+        let activeCount = store.activeWishes.count
+        return VStack(alignment: .leading, spacing: 0) {
             VStack(spacing: 10) {
                 Text("No news today.")
                     .font(Paper.head(30, .regular))
                     .foregroundStyle(Paper.ink)
                 Rectangle().fill(Paper.rule).frame(width: 56, height: 0.75)
-                Text("\(edition.readLine). Nothing new against your \(store.wishes.count) wish\(store.wishes.count == 1 ? "" : "es").")
+                Text("\(edition.readLine). Nothing new against your \(activeCount) wish\(activeCount == 1 ? "" : "es").")
                     .font(Paper.body(14.5))
                     .foregroundStyle(Paper.ink2)
                     .multilineTextAlignment(.center)

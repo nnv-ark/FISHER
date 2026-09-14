@@ -152,31 +152,46 @@ struct SourcesSettings: View {
     private var selected: Adapter? { store.adapters.first { $0.id == selection } }
 
     var body: some View {
-        HSplitView {
-            List(selection: $selection) {
-                ForEach($store.adapters) { $adapter in
-                    HStack(spacing: 8) {
-                        Toggle("", isOn: Binding(
-                            get: { adapter.enabled },
-                            set: { store.setAdapterEnabled(adapter.id, $0) }))
-                            .labelsHidden()
-                            .controlSize(.mini)
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text(adapter.name).font(.system(size: 12, weight: .medium))
-                            Text(adapter.kind.title).font(.system(size: 10)).foregroundStyle(.secondary)
+        VStack(spacing: 0) {
+            HSplitView {
+                // A plain ScrollView + LazyVStack rather than List: NSTableView-backed
+                // Lists inside an HSplitView with a fixed height under-report their
+                // document size and the last sources can never be scrolled into view.
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach($store.adapters) { $adapter in
+                            HStack(spacing: 6) {
+                                Toggle("", isOn: Binding(
+                                    get: { adapter.enabled },
+                                    set: { store.setAdapterEnabled(adapter.id, $0) }))
+                                    .labelsHidden()
+                                    .controlSize(.mini)
+                                Text(adapter.name).font(.system(size: 12, weight: .medium)).lineLimit(1)
+                                Text("·").foregroundStyle(.secondary)
+                                Text(adapter.kind.title).font(.system(size: 10)).foregroundStyle(.secondary).lineLimit(1)
+                                Spacer(minLength: 0)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(selection == adapter.id ? Color.accentColor.opacity(0.15) : Color.clear)
+                            .contentShape(Rectangle())
+                            .onTapGesture { selection = adapter.id }
                         }
                     }
-                    .tag(adapter.id)
                 }
-            }
-            .frame(minWidth: 190, maxWidth: 230)
+                .frame(minWidth: 190, maxWidth: 230)
 
             detail
                 .frame(minWidth: 320)
-        }
-        .frame(height: 430)
-        .onChange(of: selection) { _, _ in probe = nil }
-        .safeAreaInset(edge: .bottom) {
+            }
+            // Tall enough to show every source at once: a fixed-height split
+            // view under-reports its scroll document, so the list must not
+            // need scrolling at all.
+            .frame(height: 544)
+
+            Divider()
+
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
                     Text("REGISTRY")
@@ -206,19 +221,22 @@ struct SourcesSettings: View {
             .controlSize(.small)
             .padding(10)
         }
+        .frame(width: 560, height: 650)
+        .onChange(of: selection) { _, _ in probe = nil }
     }
 
     @ViewBuilder
     private var detail: some View {
         if let adapter = selected, let index = store.adapters.firstIndex(where: { $0.id == adapter.id }) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 9) {
                     Text(adapter.name).font(.system(size: 15, weight: .semibold))
                     if let notes = adapter.notes {
                         Text(notes)
                             .font(.system(size: 11))
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
+                            .lineLimit(4)
                     }
 
                     field("Search URL", text: Binding(

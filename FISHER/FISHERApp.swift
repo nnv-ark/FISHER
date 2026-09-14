@@ -6,7 +6,14 @@ struct FISHERApp: App {
     @StateObject private var store = Store()
     @State private var scheduler: Scheduler?
 
-    init() { BundledFonts.register() }
+    init() {
+        BundledFonts.register()
+        // A daily paper must survive between readings: without this, macOS
+        // auto-terminates the app once it sits idle and occluded (observed as
+        // a clean "Termination complete" ~40 s after a background launch),
+        // and the next morning's edition never prints.
+        ProcessInfo.processInfo.disableAutomaticTermination("daily sweep scheduled")
+    }
 
     var body: some Scene {
         Window("Wish Fisher", id: "paper") {
